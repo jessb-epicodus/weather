@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import WeatherService from './js/weather-service.js';
 // import './js/try.js';
 // import checkLocation from './js/try.js';
 
@@ -9,25 +10,8 @@ $(document).ready(function() {
   $('#weatherLocation').click(function() {
     const city = $('#location').val();
     $('#location').val("");
-
-
-    let promise = new Promise(function(resolve, reject) {
-      let request = new XMLHttpRequest();
-      const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${process.env.API_KEY}`;
-      
-      request.onload = function() {
-        if (this.status === 200) {
-          resolve(request.response);
-        } else {
-          reject(request.response);
-        }
-      };
-      request.open("GET", url, true);
-      request.send();
-    });
-
+    let promise = WeatherService.getWeather(city);
     promise.then(function(response) {
-      console.log(response);  
       const body = JSON.parse(response);
       $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
       $('.showTemp').text(`Temperature: ${Math.round(body.main.temp)}F`);
@@ -39,29 +23,16 @@ $(document).ready(function() {
       $('.showTemp').text("");
       $('.showWeather').text("");
     });
+    
 
     // ***********************************
     // ***********************************  
-    let promise2 = new Promise(function(resolve, reject) {
-      let request2 = new XMLHttpRequest();
-      const url2 = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${process.env.API_KEY}`;
-      request2.onload = function() {
-        if (this.status === 200) {
-          resolve(request2.response);
-        } else {
-          reject(request2.response);
-        }
-      };
-      request2.open("GET", url2, true);
-      request2.send();
-    });
-    
+
+    let promise2 = WeatherService.getForecast(city);
     promise2.then(function(response) {
-      // console.log(response);  
-      const body2 = JSON.parse(response);
-      //console.log(body2);
+      const body = JSON.parse(response);
       for (let i = 3; i < 40; i = i + 8) {
-        $('.5DayForecast').append(`Forecast for ${city} <br> ${body2.list[i].dt_txt}- Humidity:  ${body2.list[i].main.humidity}%;  Temperature: ${Math.round(body2.list[i].main.temp)}F;  Conditions: ${body2.list[i].weather[0].description} <br>`);
+        $('.5DayForecast').append(`Forecast for ${city} <br> ${body.list[i].dt_txt}- Humidity:  ${body.list[i].main.humidity}%;  Temperature: ${Math.round(body.list[i].main.temp)}F;  Conditions: ${body.list[i].weather[0].description} <br>`);
       }
       $(`.showErrors`).text("");
     }, function(error) {
