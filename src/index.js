@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-import './js/try.js';
+// import './js/try.js';
 // import checkLocation from './js/try.js';
 
 $(document).ready(function() {
@@ -27,9 +27,10 @@ $(document).ready(function() {
     });
 
     promise.then(function(response) {
+      console.log(response);  
       const body = JSON.parse(response);
       $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
-      $('.showTemp').text(`Temperature: ${Math.round(body.main.temp)} F`);
+      $('.showTemp').text(`Temperature: ${Math.round(body.main.temp)}F`);
       $('.showWeather').text(`Conditions: ${body.weather[0].description}`);
       $('.showErrors').text("");
     }, function(error) {
@@ -41,25 +42,34 @@ $(document).ready(function() {
 
     // ***********************************
     // ***********************************  
-
-    // let request2 = new XMLHttpRequest();
-    // const url2 = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${process.env.API_KEY}`;
-    // request2.onreadystatechange = function() {
-    //   if (this.readyState === 4 && this.status === 200) {
-    //     const response2 = JSON.parse(this.responseText);
-    //     forecast(response2);
-    //   }
-    // };
-
-    // request2.open("GET", url2, true);
-    // request2.send();
-
-    // function forecast(response2) {
-    //   for (let i = 3; i < 40; i = i + 8) {
-    //     $('.5DayForecast').append(`Forecast for ${city} <br> ${response2.list[i].dt_txt}- Humidity:  ${response2.list[i].main.humidity}%;  Temperature: ${Math.round(response2.list[i].main.temp)}F;  Conditions: ${response2.list[i].weather[0].description} <br>`);
-    //   }
-    // }
-
+    let promise2 = new Promise(function(resolve, reject) {
+      let request2 = new XMLHttpRequest();
+      const url2 = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${process.env.API_KEY}`;
+      request2.onload = function() {
+        if (this.status === 200) {
+          resolve(request2.response);
+        } else {
+          reject(request2.response);
+        }
+      };
+      request2.open("GET", url2, true);
+      request2.send();
+    });
+    
+    promise2.then(function(response) {
+      // console.log(response);  
+      const body2 = JSON.parse(response);
+      //console.log(body2);
+      for (let i = 3; i < 40; i = i + 8) {
+        $('.5DayForecast').append(`Forecast for ${city} <br> ${body2.list[i].dt_txt}- Humidity:  ${body2.list[i].main.humidity}%;  Temperature: ${Math.round(body2.list[i].main.temp)}F;  Conditions: ${body2.list[i].weather[0].description} <br>`);
+      }
+      $(`.showErrors`).text("");
+    }, function(error) {
+      $('.5DayShowErrors').text(`There was an error processing your request: ${error}`);
+      $('.5DayShowHumidity').text("");
+      $('.5DayShowTemp').text("");
+      $('.5DayShowWeather').text("");
+    });
   });
 });
 
