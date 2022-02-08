@@ -6,10 +6,22 @@ import WeatherService from './js/weather-service.js';
 // import './js/try.js';
 // import checkLocation from './js/try.js';
 
+function clearFields() {
+  $('#location').val("");
+  $('.showErrors').text("");
+  $('.showHumidity').text("");
+  $('.showTemp').text("");
+  $('.5DayShowHumidity').text("");
+  $('.5DayShowTemp').text("");
+  $('.5DayShowWeather').text("");
+  $('.5DayForecast').text("");
+}
+
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
     const city = $('#location').val();
     $('#location').val("");
+    clearFields();
     let promise = WeatherService.getWeather(city);
     promise.then(function(response) {
       const body = JSON.parse(response);
@@ -19,9 +31,6 @@ $(document).ready(function() {
       $('.showErrors').text("");
     }, function(error) {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
-      $('.showHumidity').text("");
-      $('.showTemp').text("");
-      $('.showWeather').text("");
     });
     
 
@@ -37,9 +46,6 @@ $(document).ready(function() {
       $(`.showErrors`).text("");
     }, function(error) {
       $('.5DayShowErrors').text(`There was an error processing your request: ${error}`);
-      $('.5DayShowHumidity').text("");
-      $('.5DayShowTemp').text("");
-      $('.5DayShowWeather').text("");
     });
   });
 });
@@ -49,19 +55,19 @@ $(document).ready(function() {
 
 
 
-    // function getElements2(response2) {
-    //   $('.5DayShowHumidity').text(`The forecasted humidity in ${city} is ${response2.list[0].main.humidity}%`);
-    //   $('.5DayShowTemp').text(`The forecasted temperature in F is ${response2.list[0].main.temp} degrees.`);
-    //   $('.5DayShowWeather').text(`The forecasated weather is ${response2.list[0].weather[0].description}.`);
-    // }
-    // try {
-    //   const isLocationValid = checkLocation(city);
-    //   if (isLocationValid instanceof Error) {
-    //     console.error(isLocationValid.message);
-    //     throw RangeError("Not a valid location!");
-    //   } else {
-    //     console.log("Try was successful, so no need to catch!")
-    //   }
-    // } catch(error) {
-    //   console.error(`Red alert! We have an error: ${error.message}`);
-    // }
+// function getElements2(response2) {
+//   $('.5DayShowHumidity').text(`The forecasted humidity in ${city} is ${response2.list[0].main.humidity}%`);
+//   $('.5DayShowTemp').text(`The forecasted temperature in F is ${response2.list[0].main.temp} degrees.`);
+//   $('.5DayShowWeather').text(`The forecasated weather is ${response2.list[0].weather[0].description}.`);
+// }
+// try {
+//   const isLocationValid = checkLocation(city);
+//   if (isLocationValid instanceof Error) {
+//     console.error(isLocationValid.message);
+//     throw RangeError("Not a valid location!");
+//   } else {
+//     console.log("Try was successful, so no need to catch!")
+//   }
+// } catch(error) {
+//   console.error(`Red alert! We have an error: ${error.message}`);
+// }
