@@ -46,7 +46,7 @@ $(document).ready(function() {
     // }
     function forecast(response2) {
       for (let i = 3; i < 40; i = i + 8) {
-        $('.5DayShowHumidity').append(`Forecast for ${city} <br> ${response2.list[i].dt_txt}- Humidity:  ${response2.list[i].main.humidity}%;  Temperature: ${Math.round(response2.list[i].main.temp)}F;  Conditions: ${response2.list[i].weather[0].description} <br>`);
+        $('.5DayForecast').append(`Forecast for ${city} <br> ${response2.list[i].dt_txt}- Humidity:  ${response2.list[i].main.humidity}%;  Temperature: ${Math.round(response2.list[i].main.temp)}F;  Conditions: ${response2.list[i].weather[0].description} <br>`);
       }
     }
   });
