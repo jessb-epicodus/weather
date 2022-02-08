@@ -35,8 +35,8 @@ $(document).ready(function() {
 
     function getElements(response) {
       $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
-      $('.showTemp').text(`The temperature in F is ${response.main.temp} degrees.`);
-      $('.showWeather').text(`The weather is ${response.weather[0].description}.`);
+      $('.showTemp').text(`Temperature: ${Math.round(response.main.temp)} F.`);
+      $('.showWeather').text(`Conditions: ${response.weather[0].description}.`);
     }
     
     // function getElements2(response2) {
@@ -45,8 +45,8 @@ $(document).ready(function() {
     //   $('.5DayShowWeather').text(`The forecasated weather is ${response2.list[0].weather[0].description}.`);
     // }
     function forecast(response2) {
-      for (let i = 4; i < 40; i = i + 8) {
-        $('.5DayShowHumidity').append(`Forecast for ${city} <br> ${response2.list[i].dt_txt}- Humidity:  ${response2.list[i].main.humidity}%;  Temperature: ${response2.list[i].main.temp}F;  Conditions: ${response2.list[i].weather[0].description} <br>`);
+      for (let i = 3; i < 40; i = i + 8) {
+        $('.5DayShowHumidity').append(`Forecast for ${city} <br> ${response2.list[i].dt_txt}- Humidity:  ${response2.list[i].main.humidity}%;  Temperature: ${Math.round(response2.list[i].main.temp)}F;  Conditions: ${response2.list[i].weather[0].description} <br>`);
       }
     }
   });
