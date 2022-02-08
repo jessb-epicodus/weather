@@ -2,6 +2,8 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import './js/try.js'
+import checkLocation from './js/try.js';
 
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
@@ -33,10 +35,22 @@ $(document).ready(function() {
     request2.open("GET", url2, true);
     request2.send();
 
+    try {
+      const isLocationValid = checkLocation(city);
+      if (isLocationValid instanceof Error) {
+        console.error(isLocationValid.message);
+        throw RangeError("Not a valid location!");
+      } else {
+        console.log("Try was successful, so no need to catch!")
+      }
+    } catch(error) {
+      console.error(`Red alert! We have an error: ${error.message}`);
+    }
+
     function getElements(response) {
       $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
-      $('.showTemp').text(`Temperature: ${Math.round(response.main.temp)} F.`);
-      $('.showWeather').text(`Conditions: ${response.weather[0].description}.`);
+      $('.showTemp').text(`Temperature: ${Math.round(response.main.temp)} F`);
+      $('.showWeather').text(`Conditions: ${response.weather[0].description}`);
     }
     
     // function getElements2(response2) {
