@@ -3,8 +3,6 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import WeatherService from './js/weather-service.js';
-// import './js/try.js';
-// import checkLocation from './js/try.js';
 
 function clearFields() {
   $('#location').val("");
